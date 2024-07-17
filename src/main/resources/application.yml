@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: ENC(v9A7e24wURkqkXtE+Z+ELauvvr2qvz0U)
+    password: ENC(TCRfpLR1HS2Z5dp7N5yAlANrTIf9EyrU)
+    url: ENC(sGWslieO7R1arCDQTmjtGxeNQLO6bXQfR2HTITYQn/kMIVYngCQwPoltDbIX7GBBZLl48vUqzzc=)
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
