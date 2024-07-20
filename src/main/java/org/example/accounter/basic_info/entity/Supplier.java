@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.accounter.basic_info.dto.SupplierUpdateRequest;
 import org.example.accounter.core.constants.MainType;
+import org.example.accounter.core.entity.BaseTimeEntity;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
@@ -13,7 +14,7 @@ import org.hibernate.annotations.Comment;
 @AllArgsConstructor
 @Builder
 @Table(name = "supplier")
-public class Supplier {
+public class Supplier extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

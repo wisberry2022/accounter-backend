@@ -13,6 +13,8 @@ public interface SupplierMapper {
 
     Supplier toEntity(SupplierAddRequest request);
 
+    @Mapping(target = "regDttm", source="entity.registrationDate")
+    @Mapping(target = "modDttm", source="entity.modificationDate")
     SupplierResponse toResponse(Supplier entity);
 
     List<SupplierResponse> toResponses(List<Supplier> entities);

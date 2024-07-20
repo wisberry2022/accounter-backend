@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin("http://localhost:5173")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v0/basic-info/sply")
@@ -36,9 +35,9 @@ public class SupplierController {
         return ResponseEntity.ok("수정되었습니다!");
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
-        service.delete(id);
+    @DeleteMapping
+    public ResponseEntity<String> delete(@RequestBody List<Long> ids) {
+        service.delete(ids);
         return ResponseEntity.ok("삭제되었습니다!");
     }
 

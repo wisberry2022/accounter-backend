@@ -48,8 +48,8 @@ public class SupplierService {
     }
 
     @Transactional
-    public void delete(Long id) {
-        repo.deleteById(id);
+    public void delete(List<Long> ids) {
+        repo.deleteAllById(ids);
     }
 
 }

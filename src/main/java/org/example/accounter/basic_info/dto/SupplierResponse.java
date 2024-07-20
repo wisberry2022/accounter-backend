@@ -3,6 +3,8 @@ package org.example.accounter.basic_info.dto;
 import lombok.*;
 import org.example.accounter.core.constants.MainType;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,5 +19,7 @@ public class SupplierResponse {
     private String address;
     private String category;
     private MainType main;
+    private LocalDateTime regDttm;
+    private LocalDateTime modDttm;
 
 }
