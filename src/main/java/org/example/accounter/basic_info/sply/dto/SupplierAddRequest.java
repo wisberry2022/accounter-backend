@@ -1,16 +1,15 @@
-package org.example.accounter.basic_info.dto;
+package org.example.accounter.basic_info.sply.dto;
 
 import lombok.*;
 import org.example.accounter.core.constants.MainType;
 
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class SupplierUpdateRequest {
+@ToString
+public class SupplierAddRequest {
 
-    private Long id;
     private String name;
     private String representationName;
     private String corpCode;

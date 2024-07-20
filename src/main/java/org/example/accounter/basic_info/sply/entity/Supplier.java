@@ -1,8 +1,8 @@
-package org.example.accounter.basic_info.entity;
+package org.example.accounter.basic_info.sply.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.accounter.basic_info.dto.SupplierUpdateRequest;
+import org.example.accounter.basic_info.sply.dto.SupplierUpdateRequest;
 import org.example.accounter.core.constants.MainType;
 import org.example.accounter.core.entity.BaseTimeEntity;
 import org.hibernate.annotations.ColumnDefault;

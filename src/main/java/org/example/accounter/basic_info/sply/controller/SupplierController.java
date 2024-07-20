@@ -1,10 +1,10 @@
-package org.example.accounter.basic_info.controller;
+package org.example.accounter.basic_info.sply.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.accounter.basic_info.dto.SupplierAddRequest;
-import org.example.accounter.basic_info.dto.SupplierResponse;
-import org.example.accounter.basic_info.dto.SupplierUpdateRequest;
-import org.example.accounter.basic_info.service.SupplierService;
+import org.example.accounter.basic_info.sply.dto.SupplierAddRequest;
+import org.example.accounter.basic_info.sply.dto.SupplierResponse;
+import org.example.accounter.basic_info.sply.dto.SupplierUpdateRequest;
+import org.example.accounter.basic_info.sply.service.SupplierService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

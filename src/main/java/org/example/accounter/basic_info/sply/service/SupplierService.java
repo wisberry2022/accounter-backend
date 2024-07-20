@@ -1,12 +1,12 @@
-package org.example.accounter.basic_info.service;
+package org.example.accounter.basic_info.sply.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.accounter.basic_info.dto.SupplierAddRequest;
-import org.example.accounter.basic_info.dto.SupplierResponse;
-import org.example.accounter.basic_info.dto.SupplierUpdateRequest;
-import org.example.accounter.basic_info.entity.Supplier;
-import org.example.accounter.basic_info.mapper.SupplierMapper;
-import org.example.accounter.basic_info.repository.SupplierRepository;
+import org.example.accounter.basic_info.sply.dto.SupplierAddRequest;
+import org.example.accounter.basic_info.sply.dto.SupplierResponse;
+import org.example.accounter.basic_info.sply.dto.SupplierUpdateRequest;
+import org.example.accounter.basic_info.sply.entity.Supplier;
+import org.example.accounter.basic_info.sply.mapper.SupplierMapper;
+import org.example.accounter.basic_info.sply.repository.SupplierRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

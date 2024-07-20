@@ -1,8 +1,8 @@
-package org.example.accounter.basic_info.mapper;
+package org.example.accounter.basic_info.sply.mapper;
 
-import org.example.accounter.basic_info.dto.SupplierAddRequest;
-import org.example.accounter.basic_info.dto.SupplierResponse;
-import org.example.accounter.basic_info.entity.Supplier;
+import org.example.accounter.basic_info.sply.dto.SupplierAddRequest;
+import org.example.accounter.basic_info.sply.dto.SupplierResponse;
+import org.example.accounter.basic_info.sply.entity.Supplier;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

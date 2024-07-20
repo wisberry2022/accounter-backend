@@ -1,16 +1,14 @@
-package org.example.accounter.basic_info.dto;
+package org.example.accounter.basic_info.sply.dto;
 
 import lombok.*;
 import org.example.accounter.core.constants.MainType;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class SupplierResponse {
+public class SupplierUpdateRequest {
 
     private Long id;
     private String name;
@@ -19,7 +17,5 @@ public class SupplierResponse {
     private String address;
     private String category;
     private MainType main;
-    private LocalDateTime regDttm;
-    private LocalDateTime modDttm;
 
 }
