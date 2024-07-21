@@ -47,4 +47,10 @@ public class AccountSubjectController {
         return ResponseEntity.ok(result);
     }
 
+    @PostMapping("/auto")
+    public ResponseEntity<String> autoRegister(@RequestBody List<AccountAddRequest> requests) {
+        service.autoAdd(requests);
+        return ResponseEntity.ok("등록되었습니다.");
+    }
+
 }

@@ -14,6 +14,8 @@ public interface AccountSubjectMapper {
     @Mapping(target = "id", ignore = true)
     AccountSubject toEntity(AccountAddRequest request);
 
+    List<AccountSubject> toEntities(List<AccountAddRequest> requests);
+
     @Mapping(target = "regDttm", source="entity.registrationDate")
     @Mapping(target = "modDttm", source="entity.modificationDate")
     AccountResponse toResponse(AccountSubject entity);

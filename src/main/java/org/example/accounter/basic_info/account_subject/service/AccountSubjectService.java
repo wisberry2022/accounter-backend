@@ -24,11 +24,6 @@ public class AccountSubjectService {
     }
 
     @Transactional
-    public void add(AccountAddRequest request) {
-        repo.save(mapper.toEntity(request));
-    }
-
-    @Transactional
     public List<AccountResponse> getAll() {
         return mapper.toResponses(repo.findAll());
     }
@@ -36,6 +31,17 @@ public class AccountSubjectService {
     @Transactional
     public AccountResponse getDto(Long id) {
         return mapper.toResponse(get(id));
+    }
+
+    @Transactional
+    public void add(AccountAddRequest request) {
+        repo.save(mapper.toEntity(request));
+    }
+
+    @Transactional
+    public void autoAdd(List<AccountAddRequest> requests) {
+        repo.deleteAll();
+        repo.saveAll(mapper.toEntities(requests));
     }
 
     @Transactional
