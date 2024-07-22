@@ -7,6 +7,7 @@ import org.example.accounter.basic_info.account_subject.dto.AccountUpdateRequest
 import org.example.accounter.basic_info.account_subject.entity.AccountSubject;
 import org.example.accounter.basic_info.account_subject.mapper.AccountSubjectMapper;
 import org.example.accounter.basic_info.account_subject.repository.AccountSubjectRepository;
+import org.example.accounter.core.constants.AccountCategory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,8 @@ public class AccountSubjectService {
     private final AccountSubjectRepository repo;
     private final AccountSubjectMapper mapper;
 
-    private AccountSubject get(Long id) {
+    @Transactional
+    public AccountSubject get(Long id) {
         return repo.findById(id).orElseThrow(() -> new RuntimeException("존재하지 않는 계정과목입니다!"));
     }
 
