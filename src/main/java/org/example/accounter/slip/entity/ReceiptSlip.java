@@ -26,4 +26,7 @@ public class ReceiptSlip extends Slip {
         this.credit = credit;
     }
 
+    public void setDebit(AccountSubject debit) {
+        this.debit = debit;
+    }
 }

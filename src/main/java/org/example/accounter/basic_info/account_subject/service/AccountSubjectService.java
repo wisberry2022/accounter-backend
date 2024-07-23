@@ -26,6 +26,11 @@ public class AccountSubjectService {
     }
 
     @Transactional
+    public AccountSubject get(String name) {
+        return repo.findByName(name).orElseThrow(() -> new RuntimeException("존재하지 않는 계정과목입니다!"));
+    }
+
+    @Transactional
     public List<AccountResponse> getAll() {
         return mapper.toResponses(repo.findAll());
     }
