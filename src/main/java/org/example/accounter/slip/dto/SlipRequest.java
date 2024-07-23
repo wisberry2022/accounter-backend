@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.accounter.core.constants.SlipType;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,6 +25,7 @@ public class SlipRequest {
     private String amount;
     private String item;
     private SlipType slipType;
+    private LocalDateTime transactionDateTime;
 
 
 }

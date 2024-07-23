@@ -8,7 +8,10 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.example.accounter.core.constants.SlipType;
 import org.example.accounter.core.entity.BaseTimeEntity;
+import org.example.accounter.slip.dto.SlipRequest;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -32,5 +35,15 @@ public class Slip extends BaseTimeEntity {
 
     @Column(name= "slip_item")
     private String item;
+
+    @Column(name = "tran_dttm")
+    private LocalDateTime transactionDateTime;
+
+    public void update(SlipRequest request) {
+        this.desc = request.getDesc();
+        this.amount = request.getAmount();
+        this.item = request.getItem();
+        this.transactionDateTime = request.getTransactionDateTime();
+    }
 
 }
