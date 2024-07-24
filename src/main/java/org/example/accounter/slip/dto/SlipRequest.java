@@ -17,7 +17,8 @@ import java.time.LocalDateTime;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "slipType")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = ReceiptSlipRequest.class, name = "RECEIPT"),
-        @JsonSubTypes.Type(value = WithdrawalSlipRequest.class, name = "WITHDRAWAL")
+        @JsonSubTypes.Type(value = WithdrawalSlipRequest.class, name = "WITHDRAWAL"),
+        @JsonSubTypes.Type(value = TransferSlipRequest.class, name = "TRANSFER")
 })
 public class SlipRequest {
 

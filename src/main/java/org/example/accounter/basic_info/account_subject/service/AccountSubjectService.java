@@ -31,6 +31,11 @@ public class AccountSubjectService {
     }
 
     @Transactional
+    public List<AccountSubject> getAll(List<Long> ids) {
+        return repo.findAllById(ids);
+    }
+
+    @Transactional
     public List<AccountResponse> getAll() {
         return mapper.toResponses(repo.findAll());
     }

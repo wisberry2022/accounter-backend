@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.accounter.slip.dto.ReceiptSlipRequest;
 import org.example.accounter.slip.dto.SlipRequest;
 import org.example.accounter.slip.entity.Slip;
+import org.example.accounter.slip.entity.TransferSlip;
 import org.example.accounter.slip.mapper.SlipMapper;
 import org.example.accounter.slip.repository.SlipRepository;
 import org.springframework.stereotype.Service;
