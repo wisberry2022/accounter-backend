@@ -20,6 +20,10 @@ public class SlipEntry {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "slip_id")
+    private TransferSlip slip;
+
     @Comment("계정과목")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "act_sbj_id")

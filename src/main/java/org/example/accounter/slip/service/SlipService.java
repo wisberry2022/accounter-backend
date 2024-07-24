@@ -22,4 +22,5 @@ public class SlipService {
         Slip slip = mapper.toEntity(request);
         repo.save(slip);
     }
+
 }
