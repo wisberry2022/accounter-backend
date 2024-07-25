@@ -27,6 +27,10 @@ public class Slip extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "slip_type", insertable = false, updatable = false)
+    private SlipType type;
+
     @Column(name = "slip_desc")
     private String desc;
 
@@ -45,5 +49,4 @@ public class Slip extends BaseTimeEntity {
         this.item = request.getItem();
         this.transactionDateTime = request.getTransactionDateTime();
     }
-
 }
