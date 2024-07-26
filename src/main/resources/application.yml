@@ -1,4 +1,8 @@
 spring:
+  config:
+    import: "classpath:properties/test-props.yml"
+
+
   datasource:
     driver-class-name: org.postgresql.Driver
     username: ENC(v9A7e24wURkqkXtE+Z+ELauvvr2qvz0U)

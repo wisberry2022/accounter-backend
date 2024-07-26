@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @SuperBuilder
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "slip_type")
+@DiscriminatorColumn(name = "slip_type", discriminatorType = DiscriminatorType.STRING)
 @Table(name = "slip")
 @Entity
 public class Slip extends BaseTimeEntity {
