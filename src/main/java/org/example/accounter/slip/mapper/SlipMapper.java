@@ -1,9 +1,6 @@
 package org.example.accounter.slip.mapper;
 
-import org.example.accounter.slip.dto.ReceiptSlipRequest;
-import org.example.accounter.slip.dto.SlipRequest;
-import org.example.accounter.slip.dto.TransferSlipRequest;
-import org.example.accounter.slip.dto.WithdrawalSlipRequest;
+import org.example.accounter.slip.dto.*;
 import org.example.accounter.slip.entity.ReceiptSlip;
 import org.example.accounter.slip.entity.Slip;
 import org.example.accounter.slip.entity.TransferSlip;
@@ -29,6 +26,19 @@ public interface SlipMapper {
         return null;
     }
 
+    default PaperSlipDto toDto(Slip entity) {
+        if(entity == null) {
+            return null;
+        }
+
+        if(entity instanceof TransferSlip) {
+            return null;
+        }
+
+        return toPaperSlipDto(entity);
+    }
+
+
     @Mapping(target = "id", ignore = true)
     ReceiptSlip toEntity(ReceiptSlipRequest request);
 
@@ -39,5 +49,10 @@ public interface SlipMapper {
     @Mapping(target = "credits", ignore = true)
     @Mapping(target = "debits", ignore = true)
     TransferSlip toEntity(TransferSlipRequest request);
+
+    @Mapping(target = "date", source="entity.transactionDateTime")
+    @Mapping(target = "slip", source="entity.type")
+    @Mapping(target = "subject", ignore = true)
+    PaperSlipDto toPaperSlipDto(Slip entity);
 
 }

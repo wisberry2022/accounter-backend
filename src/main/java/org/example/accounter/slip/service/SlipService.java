@@ -2,6 +2,7 @@ package org.example.accounter.slip.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.accounter.slip.controller.response.SlipListResponse;
+import org.example.accounter.slip.dto.PaperSlipDto;
 import org.example.accounter.slip.dto.ReceiptSlipRequest;
 import org.example.accounter.slip.dto.SlipRequest;
 import org.example.accounter.slip.entity.Slip;
@@ -23,6 +24,20 @@ public class SlipService {
 
     private final SlipRepository repo;
     private final SlipMapper mapper;
+
+    @Transactional
+    public Slip get(Long id) {
+        return repo.findById(id).orElseThrow(() -> {
+            throw new RuntimeException("존재하지 않는 전표입니다!");
+        });
+    }
+
+    @Transactional
+    public PaperSlipDto getDto(Long id) {
+        Slip slip = get(id);
+        PaperSlipDto dto = mapper.toDto(slip);
+        return dto;
+    }
 
     @Transactional
     public Page<SlipListResponse> getAllDto(int page, int size) {
