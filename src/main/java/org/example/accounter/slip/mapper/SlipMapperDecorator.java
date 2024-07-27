@@ -1,7 +1,9 @@
 package org.example.accounter.slip.mapper;
 
+import lombok.With;
 import org.example.accounter.basic_info.account_subject.entity.AccountSubject;
 import org.example.accounter.basic_info.account_subject.service.AccountSubjectService;
+import org.example.accounter.core.util.NullableGetter;
 import org.example.accounter.slip.dto.*;
 import org.example.accounter.slip.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +56,16 @@ public abstract class SlipMapperDecorator implements SlipMapper {
             dto.setSubject(
                     PaperSlipDto.SubjectDto
                             .builder()
-                            .creditId(getAccountId(((ReceiptSlip) entity).getCredit()))
-                            .credit(getAccountName(((ReceiptSlip) entity).getCredit()))
+                            .creditId(NullableGetter
+                                        .getLong(((ReceiptSlip) entity).getCredit(),
+                                                    ((ReceiptSlip) entity).getCredit()::getId
+                                                )
+                                      )
+                            .credit(NullableGetter
+                                        .getStr(((ReceiptSlip) entity).getCredit(),
+                                                    ((ReceiptSlip) entity).getCredit()::getName
+                                        )
+                                    )
                             .build()
             );
         }
@@ -63,26 +73,22 @@ public abstract class SlipMapperDecorator implements SlipMapper {
             dto.setSubject(
                     PaperSlipDto.SubjectDto
                             .builder()
-                            .debitId(getAccountId(((WithdrawalSlip) entity).getDebit()))
-                            .debit(getAccountName(((WithdrawalSlip) entity).getDebit()))
+                            .debitId(
+                                    NullableGetter
+                                            .getLong(
+                                                ((WithdrawalSlip) entity).getDebit(), ((WithdrawalSlip) entity).getDebit()::getId
+                                            )
+                                    )
+                            .debit(
+                                    NullableGetter
+                                            .getStr(
+                                                ((WithdrawalSlip) entity).getDebit(), ((WithdrawalSlip) entity).getDebit()::getName
+                                            )
+                                   )
                             .build()
             );
         }
         return dto;
-    }
-
-    private Long getAccountId(AccountSubject subject) {
-        if(subject == null) {
-            return 0L;
-        }
-        return Optional.ofNullable(subject.getId()).orElse(0L);
-    }
-
-    private String getAccountName(AccountSubject subject) {
-        if(subject == null) {
-            return "";
-        }
-        return Optional.ofNullable(subject.getName()).orElse("");
     }
 
     private List<SlipEntry> getEntries(List<SlipEntryDto> dto) {
