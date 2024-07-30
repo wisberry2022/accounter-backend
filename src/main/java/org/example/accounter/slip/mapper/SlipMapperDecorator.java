@@ -9,8 +9,10 @@ import org.example.accounter.slip.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
 @Component
 public abstract class SlipMapperDecorator implements SlipMapper {
@@ -90,6 +92,70 @@ public abstract class SlipMapperDecorator implements SlipMapper {
         }
         return dto;
     }
+
+    @Override
+    public TransferSlipDto toTransferSlipDto(TransferSlip entity) {
+        TransferSlipDto dto = delegate.toTransferSlipDto(entity);
+
+        int creditSize = entity.getCredits().size();
+        int debitSize = entity.getDebits().size();
+
+        List<SlipEntry> credits = entity.getCredits();
+        List<SlipEntry> debits = entity.getDebits();
+
+        List<TransferSlipDto.TransferEntry> list = null;
+        // 차변 개수 == 대변 개수의 경우
+        if(debitSize == creditSize) {
+            list = IntStream.range(0, debitSize)
+                    .mapToObj(i -> {
+                      TransferSlipDto.SimpleEntryDto debit = TransferSlipDto.SimpleEntryDto.fromEntity(debits.get(i));
+                      TransferSlipDto.SimpleEntryDto credit = TransferSlipDto.SimpleEntryDto.fromEntity(credits.get(i));
+
+                      return TransferSlipDto.TransferEntry
+                              .builder()
+                              .seq(Long.parseLong(String.valueOf(i)))
+                              .debit(debit)
+                              .credit(credit)
+                              .build();
+                    })
+                    .toList();
+        }
+        // 차변 개수 > 대변 개수
+        if(debitSize > creditSize) {
+            list = IntStream.range(0, debitSize)
+                    .mapToObj(i -> {
+                        TransferSlipDto.SimpleEntryDto debit = TransferSlipDto.SimpleEntryDto.fromEntity(debits.get(i));
+                        TransferSlipDto.SimpleEntryDto credit = TransferSlipDto.SimpleEntryDto.fromEntity(credits.size() > i ? credits.get(i) : null);
+
+                        return TransferSlipDto.TransferEntry
+                                .builder()
+                                .seq(Long.parseLong(String.valueOf(i)))
+                                .debit(debit)
+                                .credit(credit)
+                                .build();
+                    }).toList();
+        }
+        // 차변 개수 < 대변 개수
+        if(debitSize < creditSize) {
+            list = IntStream.range(0, creditSize)
+                    .mapToObj(i -> {
+                        TransferSlipDto.SimpleEntryDto credit = TransferSlipDto.SimpleEntryDto.fromEntity(credits.get(i));
+                        TransferSlipDto.SimpleEntryDto debit = TransferSlipDto.SimpleEntryDto.fromEntity(debits.size() > i ? debits.get(i) : null);
+
+                        return TransferSlipDto.TransferEntry
+                                .builder()
+                                .seq(Long.parseLong(String.valueOf(i)))
+                                .credit(credit)
+                                .debit(debit)
+                                .build();
+                    })
+                    .toList();
+        }
+
+        dto.setEntries(list);
+        return dto;
+    }
+
 
     private List<SlipEntry> getEntries(List<SlipEntryDto> dto) {
         return dto.stream()

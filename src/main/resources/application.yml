@@ -2,6 +2,11 @@ spring:
   config:
     import: "classpath:properties/test-props.yml"
 
+  devtools:
+    livereload:
+      enabled: false
+    restart:
+      enabled: false
 
   datasource:
     driver-class-name: org.postgresql.Driver

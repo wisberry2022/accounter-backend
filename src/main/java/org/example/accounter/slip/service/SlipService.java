@@ -1,10 +1,12 @@
 package org.example.accounter.slip.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.accounter.core.constants.SlipType;
 import org.example.accounter.slip.controller.response.SlipListResponse;
 import org.example.accounter.slip.dto.PaperSlipDto;
 import org.example.accounter.slip.dto.ReceiptSlipRequest;
 import org.example.accounter.slip.dto.SlipRequest;
+import org.example.accounter.slip.dto.TransferSlipDto;
 import org.example.accounter.slip.entity.Slip;
 import org.example.accounter.slip.entity.TransferSlip;
 import org.example.accounter.slip.mapper.SlipMapper;
@@ -35,6 +37,10 @@ public class SlipService {
     @Transactional
     public PaperSlipDto getDto(Long id) {
         Slip slip = get(id);
+        if(slip.getType().equals(SlipType.TRANSFER)) {
+            TransferSlipDto dto = mapper.toTransferSlipDto((TransferSlip) slip);
+            return dto;
+        }
         PaperSlipDto dto = mapper.toDto(slip);
         return dto;
     }

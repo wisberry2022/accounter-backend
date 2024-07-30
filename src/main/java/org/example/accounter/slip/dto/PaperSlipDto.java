@@ -1,9 +1,12 @@
 package org.example.accounter.slip.dto;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.example.accounter.core.constants.SlipType;
 
 import java.time.LocalDateTime;
@@ -11,7 +14,11 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = TransferSlipDto.class, name = "TRANSFER")
+})
+@SuperBuilder
 public class PaperSlipDto {
 
     private Long id;
