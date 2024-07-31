@@ -39,7 +39,7 @@ public class InitData {
             List<Slip> data = new ArrayList<>();
             for(int i = 0; i<createSize; i++) {
                 Slip test = getType(i)
-                        .type(SlipType.RECEIPT)
+                        .item("항목")
                         .desc("테스트 적요".concat(String.valueOf(i+1)))
                         .transactionDateTime(LocalDateTime.now())
                         .build();
