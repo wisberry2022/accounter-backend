@@ -38,15 +38,20 @@ public class TransferSlipDto extends PaperSlipDto {
         private Long amount;
 
         public static SimpleEntryDto fromEntity(SlipEntry entity) {
-            if(entity == null) {
-                return null;
-            }
             return SimpleEntryDto
                     .builder()
                     .seq(entity.getId())
                     .subject(entity.getSubject().getName())
                     .desc(entity.getDesc())
                     .amount(entity.getAmount())
+                    .build();
+        }
+
+        public static SimpleEntryDto fromNull(int seq) {
+            return SimpleEntryDto
+                    .builder()
+                    .seq(Long.parseLong(String.valueOf(seq)))
+                    .amount(0L)
                     .build();
         }
 

@@ -9,6 +9,7 @@ import org.example.accounter.slip.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -58,16 +59,8 @@ public abstract class SlipMapperDecorator implements SlipMapper {
             dto.setSubject(
                     PaperSlipDto.SubjectDto
                             .builder()
-                            .creditId(NullableGetter
-                                        .getLong(((ReceiptSlip) entity).getCredit(),
-                                                    ((ReceiptSlip) entity).getCredit()::getId
-                                                )
-                                      )
-                            .credit(NullableGetter
-                                        .getStr(((ReceiptSlip) entity).getCredit(),
-                                                    ((ReceiptSlip) entity).getCredit()::getName
-                                        )
-                                    )
+                            .creditId(Optional.ofNullable(((ReceiptSlip)entity).getCredit()).isPresent() ? ((ReceiptSlip)entity).getCredit().getId() : 0L )
+                            .credit(Optional.ofNullable(((ReceiptSlip)entity).getCredit()).isPresent() ? ((ReceiptSlip)entity).getCredit().getName() : "" )
                             .build()
             );
         }
@@ -75,18 +68,8 @@ public abstract class SlipMapperDecorator implements SlipMapper {
             dto.setSubject(
                     PaperSlipDto.SubjectDto
                             .builder()
-                            .debitId(
-                                    NullableGetter
-                                            .getLong(
-                                                ((WithdrawalSlip) entity).getDebit(), ((WithdrawalSlip) entity).getDebit()::getId
-                                            )
-                                    )
-                            .debit(
-                                    NullableGetter
-                                            .getStr(
-                                                ((WithdrawalSlip) entity).getDebit(), ((WithdrawalSlip) entity).getDebit()::getName
-                                            )
-                                   )
+                            .debitId(Optional.ofNullable(((WithdrawalSlip)entity).getDebit()).isPresent() ? ((WithdrawalSlip)entity).getDebit().getId() : 0L)
+                            .debit(Optional.ofNullable(((WithdrawalSlip) entity).getDebit()).isPresent() ? ((WithdrawalSlip) entity).getDebit().getName() : "")
                             .build()
             );
         }
@@ -108,8 +91,10 @@ public abstract class SlipMapperDecorator implements SlipMapper {
         if(debitSize == creditSize) {
             list = IntStream.range(0, debitSize)
                     .mapToObj(i -> {
-                      TransferSlipDto.SimpleEntryDto debit = TransferSlipDto.SimpleEntryDto.fromEntity(debits.get(i));
-                      TransferSlipDto.SimpleEntryDto credit = TransferSlipDto.SimpleEntryDto.fromEntity(credits.get(i));
+//                      TransferSlipDto.SimpleEntryDto debit = TransferSlipDto.SimpleEntryDto.fromEntity(debits.get(i));
+//                      TransferSlipDto.SimpleEntryDto credit = TransferSlipDto.SimpleEntryDto.fromEntity(credits.get(i));
+                      TransferSlipDto.SimpleEntryDto debit = fromEntity(debits, i);
+                      TransferSlipDto.SimpleEntryDto credit = fromEntity(credits, i);
 
                       return TransferSlipDto.TransferEntry
                               .builder()
@@ -124,8 +109,10 @@ public abstract class SlipMapperDecorator implements SlipMapper {
         if(debitSize > creditSize) {
             list = IntStream.range(0, debitSize)
                     .mapToObj(i -> {
-                        TransferSlipDto.SimpleEntryDto debit = TransferSlipDto.SimpleEntryDto.fromEntity(debits.get(i));
-                        TransferSlipDto.SimpleEntryDto credit = TransferSlipDto.SimpleEntryDto.fromEntity(credits.size() > i ? credits.get(i) : null);
+//                        TransferSlipDto.SimpleEntryDto debit = TransferSlipDto.SimpleEntryDto.fromEntity(debits.get(i));
+//                        TransferSlipDto.SimpleEntryDto credit = TransferSlipDto.SimpleEntryDto.fromEntity(credits.size() > i ? credits.get(i) : null);
+                        TransferSlipDto.SimpleEntryDto debit = fromEntity(debits, i);
+                        TransferSlipDto.SimpleEntryDto credit = fromEntity(credits, i);
 
                         return TransferSlipDto.TransferEntry
                                 .builder()
@@ -139,8 +126,10 @@ public abstract class SlipMapperDecorator implements SlipMapper {
         if(debitSize < creditSize) {
             list = IntStream.range(0, creditSize)
                     .mapToObj(i -> {
-                        TransferSlipDto.SimpleEntryDto credit = TransferSlipDto.SimpleEntryDto.fromEntity(credits.get(i));
-                        TransferSlipDto.SimpleEntryDto debit = TransferSlipDto.SimpleEntryDto.fromEntity(debits.size() > i ? debits.get(i) : null);
+//                        TransferSlipDto.SimpleEntryDto credit = TransferSlipDto.SimpleEntryDto.fromEntity(credits.get(i));
+//                        TransferSlipDto.SimpleEntryDto debit = TransferSlipDto.SimpleEntryDto.fromEntity(debits.size() > i ? debits.get(i) : null);
+                        TransferSlipDto.SimpleEntryDto credit = fromEntity(credits, i);
+                        TransferSlipDto.SimpleEntryDto debit = fromEntity(debits, i);
 
                         return TransferSlipDto.TransferEntry
                                 .builder()
@@ -162,6 +151,13 @@ public abstract class SlipMapperDecorator implements SlipMapper {
                 .map(ent ->
                         SlipEntry.of(ent, accountService.get(ent.getSubjectId()))
                 ).toList();
+    }
+
+    private TransferSlipDto.SimpleEntryDto fromEntity(List<SlipEntry> entries, int i) {
+        if(entries.size() > i) {
+            return TransferSlipDto.SimpleEntryDto.fromEntity(entries.get(i));
+        }
+        return TransferSlipDto.SimpleEntryDto.fromNull(i);
     }
 
 }

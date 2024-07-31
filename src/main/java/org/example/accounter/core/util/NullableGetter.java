@@ -7,14 +7,14 @@ import java.util.function.Supplier;
 public class NullableGetter {
 
     public static Long getLong(Object object, Supplier<Long> method) {
-        if(object == null) {
+        if(Optional.ofNullable(object).isPresent()) {
             return 0L;
         }
         return Optional.ofNullable(method.get()).orElseGet(() -> 0L);
     }
 
     public static String getStr(Object object, Supplier<String> method) {
-        if(object == null) {
+        if(Optional.ofNullable(object).isPresent()) {
             return "";
         }
         return Optional.ofNullable(method.get()).orElseGet(() -> "");
