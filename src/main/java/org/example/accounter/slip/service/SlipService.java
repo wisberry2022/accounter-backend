@@ -58,4 +58,9 @@ public class SlipService {
         repo.save(slip);
     }
 
+    @Transactional
+    public void delete(Long id) {
+        repo.deleteById(id);
+    }
+
 }

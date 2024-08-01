@@ -33,6 +33,12 @@ public class SlipController {
         return ResponseEntity.ok(dto);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+        service.delete(id);
+        return ResponseEntity.ok("삭제되었습니다.");
+    }
+
     @GetMapping("/list")
     public ResponseEntity<SimplePageDto<SlipListResponse>> getAll(@RequestParam int page, @RequestParam int size) {
         Page<SlipListResponse> list = service.getAllDto(page, size);
