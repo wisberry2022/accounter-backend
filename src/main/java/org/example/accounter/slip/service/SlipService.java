@@ -5,22 +5,18 @@ import org.example.accounter.basic_info.account_subject.service.AccountSubjectSe
 import org.example.accounter.core.constants.SlipType;
 import org.example.accounter.slip.controller.response.SlipListResponse;
 import org.example.accounter.slip.dto.PaperSlipDto;
-import org.example.accounter.slip.dto.ReceiptSlipRequest;
 import org.example.accounter.slip.dto.SlipRequest;
 import org.example.accounter.slip.dto.TransferSlipDto;
-import org.example.accounter.slip.entity.ReceiptSlip;
-import org.example.accounter.slip.entity.Slip;
-import org.example.accounter.slip.entity.TransferSlip;
-import org.example.accounter.slip.entity.WithdrawalSlip;
+import org.example.accounter.slip.entity.*;
 import org.example.accounter.slip.mapper.SlipMapper;
 import org.example.accounter.slip.repository.SlipRepository;
-import org.example.accounter.slip.repository.rdto.RSlipListDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,11 +38,9 @@ public class SlipService {
     public PaperSlipDto getDto(Long id) {
         Slip slip = get(id);
         if(slip.getType().equals(SlipType.TRANSFER)) {
-            TransferSlipDto dto = mapper.toTransferSlipDto((TransferSlip) slip);
-            return dto;
+            return mapper.toTransferSlipDto((TransferSlip) slip);
         }
-        PaperSlipDto dto = mapper.toDto(slip);
-        return dto;
+        return mapper.toDto(slip);
     }
 
     @Transactional
@@ -74,6 +68,79 @@ public class SlipService {
             WithdrawalSlip wSlip = (WithdrawalSlip)slip;
             wSlip.update(update, subjectService.get(update.getSubject().getDebitId()));
             repo.save(wSlip);
+        }
+        if(update.getSlip().equals(SlipType.TRANSFER)) {
+            TransferSlip tSlip = (TransferSlip)slip;
+            TransferSlipDto tDto = (TransferSlipDto)update;
+
+            List<TransferSlipDto.SimpleEntryDto> creditDtos = new ArrayList<>();
+            List<TransferSlipDto.SimpleEntryDto> debitDtos = new ArrayList<>();
+
+
+            tDto.getEntries().forEach(entry -> {
+                TransferSlipDto.SimpleEntryDto credit = entry.getCredit();
+                TransferSlipDto.SimpleEntryDto debit = entry.getDebit();
+                if(credit != null) {
+                    creditDtos.add(credit);
+                }
+                if(debit != null) {
+                    debitDtos.add(debit);
+                }
+            });
+
+            List<SlipEntry> credits =  tSlip.getCredits();
+            List<SlipEntry> debits = tSlip.getDebits();
+
+            credits.removeIf(entity -> !creditDtos
+                    .stream()
+                    .map(TransferSlipDto.SimpleEntryDto::getId)
+                    .toList()
+                    .contains(entity.getId())
+            );
+
+            for(TransferSlipDto.SimpleEntryDto credit:creditDtos) {
+                Long id = credit.getId();
+                if(id != null) {
+                    // 업데이트
+                    credits.stream()
+                            .filter(entity -> entity.getId().equals(id))
+                            .findFirst()
+                            .ifPresent(entity -> entity.update(credit, subjectService.get(credit.getSubjectId())));
+                }
+                if(id == null && credit.getSubjectId() != null) {
+                    // 신규 추가
+                    SlipEntry newEntry = SlipEntry.of(
+                            tSlip, credit, subjectService.get(credit.getSubjectId())
+                    );
+                    tSlip.addCredit(newEntry);
+                }
+            }
+
+            debits.removeIf(entity -> !debitDtos
+                    .stream()
+                    .map(TransferSlipDto.SimpleEntryDto::getId)
+                    .toList()
+                    .contains(entity.getId())
+            );
+
+            for(TransferSlipDto.SimpleEntryDto debit:debitDtos) {
+                Long id = debit.getId();
+                if(id != null) {
+                    // 업데이트
+                    debits.stream()
+                            .filter(entity -> entity.getId().equals(id))
+                            .findFirst()
+                            .ifPresent(entity -> entity.update(debit, subjectService.get(debit.getSubjectId())));
+                }
+                if(id == null && debit.getSubjectId() != null) {
+                    // 신규 추가
+                    SlipEntry newEntry = SlipEntry.of(
+                            tSlip, debit, subjectService.get(debit.getSubjectId())
+                    );
+                    tSlip.addDebit(newEntry);
+                }
+            }
+            repo.save(tSlip);
         }
     }
 

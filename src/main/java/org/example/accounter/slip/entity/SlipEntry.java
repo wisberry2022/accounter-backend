@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.accounter.basic_info.account_subject.entity.AccountSubject;
 import org.example.accounter.slip.dto.SlipEntryDto;
+import org.example.accounter.slip.dto.TransferSlipDto;
 import org.hibernate.annotations.Comment;
 
 @Getter
@@ -45,4 +46,22 @@ public class SlipEntry {
                 .amount(dto.getAmount())
                 .build();
     }
+
+    public static SlipEntry of(Slip slip, TransferSlipDto.SimpleEntryDto dto, AccountSubject subject) {
+        return SlipEntry
+                .builder()
+                .slip((TransferSlip) slip)
+                .subject(subject)
+                .desc(dto.getDesc())
+                .amount(dto.getAmount())
+                .build();
+    }
+
+    public void update(TransferSlipDto.SimpleEntryDto update, AccountSubject account) {
+        this.amount = update.getAmount();
+        this.desc = update.getDesc();
+        this.subject = account;
+    }
+
+
 }

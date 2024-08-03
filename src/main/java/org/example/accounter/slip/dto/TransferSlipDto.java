@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 public class TransferSlipDto extends PaperSlipDto {
@@ -34,6 +36,7 @@ public class TransferSlipDto extends PaperSlipDto {
     @Builder
     public static class SimpleEntryDto {
         private Long id;
+        private Long subjectId;
         private String subject;
         private String desc;
         private Long amount;
@@ -41,7 +44,8 @@ public class TransferSlipDto extends PaperSlipDto {
         public static SimpleEntryDto fromEntity(SlipEntry entity) {
             return SimpleEntryDto
                     .builder()
-                    .id(entity.getSubject().getId())
+                    .id(entity.getId())
+                    .subjectId(entity.getSubject().getId())
                     .subject(entity.getSubject().getName())
                     .desc(entity.getDesc())
                     .amount(entity.getAmount())
@@ -52,6 +56,7 @@ public class TransferSlipDto extends PaperSlipDto {
             return SimpleEntryDto
                     .builder()
                     .id(null)
+                    .subjectId(null)
                     .subject(null)
                     .amount(0L)
                     .build();

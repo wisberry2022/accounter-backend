@@ -31,6 +31,28 @@ public class TransferSlip extends Slip {
         this.debits = debits;
     }
 
+    public void addCredit(SlipEntry entry) {
+        this.credits.add(entry);
+    }
+
+    public void addDebit(SlipEntry entry) {
+        this.debits.add(entry);
+    }
+
+    public void removeCredit(Long id) {
+        this.credits = this.credits
+                .stream()
+                .filter(credit -> credit.getId().equals(id))
+                .toList();
+    }
+
+    public void removeDebit(Long id) {
+        this.debits = this.debits
+                .stream()
+                .filter(debit -> debit.getId().equals(id))
+                .toList();
+    }
+
     public void setCredits(List<SlipEntry> entries) {
         this.credits = entries;
     }
