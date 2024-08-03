@@ -27,6 +27,12 @@ public class SlipController {
         return ResponseEntity.ok("전표가 작성되었습니다.");
     }
 
+    @PutMapping
+    public ResponseEntity<String> update(@RequestBody PaperSlipDto request) {
+        service.update(request);
+        return ResponseEntity.ok("전표가 수정되었습니다.");
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<PaperSlipDto> get(@PathVariable("id") Long id) {
         PaperSlipDto dto = service.getDto(id);

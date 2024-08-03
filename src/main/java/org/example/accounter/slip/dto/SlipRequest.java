@@ -28,5 +28,4 @@ public class SlipRequest {
     private SlipType slipType;
     private LocalDateTime transactionDateTime;
 
-
 }

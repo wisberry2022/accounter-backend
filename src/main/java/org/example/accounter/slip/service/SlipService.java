@@ -1,14 +1,17 @@
 package org.example.accounter.slip.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.accounter.basic_info.account_subject.service.AccountSubjectService;
 import org.example.accounter.core.constants.SlipType;
 import org.example.accounter.slip.controller.response.SlipListResponse;
 import org.example.accounter.slip.dto.PaperSlipDto;
 import org.example.accounter.slip.dto.ReceiptSlipRequest;
 import org.example.accounter.slip.dto.SlipRequest;
 import org.example.accounter.slip.dto.TransferSlipDto;
+import org.example.accounter.slip.entity.ReceiptSlip;
 import org.example.accounter.slip.entity.Slip;
 import org.example.accounter.slip.entity.TransferSlip;
+import org.example.accounter.slip.entity.WithdrawalSlip;
 import org.example.accounter.slip.mapper.SlipMapper;
 import org.example.accounter.slip.repository.SlipRepository;
 import org.example.accounter.slip.repository.rdto.RSlipListDto;
@@ -26,6 +29,7 @@ public class SlipService {
 
     private final SlipRepository repo;
     private final SlipMapper mapper;
+    private final AccountSubjectService subjectService;
 
     @Transactional
     public Slip get(Long id) {
@@ -56,6 +60,21 @@ public class SlipService {
     public void write(SlipRequest request) {
         Slip slip = mapper.toEntity(request);
         repo.save(slip);
+    }
+
+    @Transactional
+    public void update(PaperSlipDto update) {
+        Slip slip = get(update.getId());
+        if(update.getSlip().equals(SlipType.RECEIPT)) {
+            ReceiptSlip rSlip = (ReceiptSlip)slip;
+            rSlip.update(update, subjectService.get(update.getSubject().getCreditId()));
+            repo.save(rSlip);
+        }
+        if(update.getSlip().equals(SlipType.WITHDRAWAL)) {
+            WithdrawalSlip wSlip = (WithdrawalSlip)slip;
+            wSlip.update(update, subjectService.get(update.getSubject().getDebitId()));
+            repo.save(wSlip);
+        }
     }
 
     @Transactional
