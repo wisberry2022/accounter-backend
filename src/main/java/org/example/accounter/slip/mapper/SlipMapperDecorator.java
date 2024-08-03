@@ -91,8 +91,6 @@ public abstract class SlipMapperDecorator implements SlipMapper {
         if(debitSize == creditSize) {
             list = IntStream.range(0, debitSize)
                     .mapToObj(i -> {
-//                      TransferSlipDto.SimpleEntryDto debit = TransferSlipDto.SimpleEntryDto.fromEntity(debits.get(i));
-//                      TransferSlipDto.SimpleEntryDto credit = TransferSlipDto.SimpleEntryDto.fromEntity(credits.get(i));
                       TransferSlipDto.SimpleEntryDto debit = fromEntity(debits, i);
                       TransferSlipDto.SimpleEntryDto credit = fromEntity(credits, i);
 
@@ -109,8 +107,6 @@ public abstract class SlipMapperDecorator implements SlipMapper {
         if(debitSize > creditSize) {
             list = IntStream.range(0, debitSize)
                     .mapToObj(i -> {
-//                        TransferSlipDto.SimpleEntryDto debit = TransferSlipDto.SimpleEntryDto.fromEntity(debits.get(i));
-//                        TransferSlipDto.SimpleEntryDto credit = TransferSlipDto.SimpleEntryDto.fromEntity(credits.size() > i ? credits.get(i) : null);
                         TransferSlipDto.SimpleEntryDto debit = fromEntity(debits, i);
                         TransferSlipDto.SimpleEntryDto credit = fromEntity(credits, i);
 
@@ -126,8 +122,6 @@ public abstract class SlipMapperDecorator implements SlipMapper {
         if(debitSize < creditSize) {
             list = IntStream.range(0, creditSize)
                     .mapToObj(i -> {
-//                        TransferSlipDto.SimpleEntryDto credit = TransferSlipDto.SimpleEntryDto.fromEntity(credits.get(i));
-//                        TransferSlipDto.SimpleEntryDto debit = TransferSlipDto.SimpleEntryDto.fromEntity(debits.size() > i ? debits.get(i) : null);
                         TransferSlipDto.SimpleEntryDto credit = fromEntity(credits, i);
                         TransferSlipDto.SimpleEntryDto debit = fromEntity(debits, i);
 
@@ -157,7 +151,7 @@ public abstract class SlipMapperDecorator implements SlipMapper {
         if(entries.size() > i) {
             return TransferSlipDto.SimpleEntryDto.fromEntity(entries.get(i));
         }
-        return TransferSlipDto.SimpleEntryDto.fromNull(i);
+        return TransferSlipDto.SimpleEntryDto.fromNull();
     }
 
 }

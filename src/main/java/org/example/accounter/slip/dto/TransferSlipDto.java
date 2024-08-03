@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import org.example.accounter.slip.entity.SlipEntry;
 
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @SuperBuilder
@@ -32,7 +33,7 @@ public class TransferSlipDto extends PaperSlipDto {
     @AllArgsConstructor
     @Builder
     public static class SimpleEntryDto {
-        private Long seq;
+        private Long id;
         private String subject;
         private String desc;
         private Long amount;
@@ -40,17 +41,18 @@ public class TransferSlipDto extends PaperSlipDto {
         public static SimpleEntryDto fromEntity(SlipEntry entity) {
             return SimpleEntryDto
                     .builder()
-                    .seq(entity.getId())
+                    .id(entity.getSubject().getId())
                     .subject(entity.getSubject().getName())
                     .desc(entity.getDesc())
                     .amount(entity.getAmount())
                     .build();
         }
 
-        public static SimpleEntryDto fromNull(int seq) {
+        public static SimpleEntryDto fromNull() {
             return SimpleEntryDto
                     .builder()
-                    .seq(Long.parseLong(String.valueOf(seq)))
+                    .id(null)
+                    .subject(null)
                     .amount(0L)
                     .build();
         }
