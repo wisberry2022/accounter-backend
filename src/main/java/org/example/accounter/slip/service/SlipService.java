@@ -75,8 +75,7 @@ public class SlipService {
 
             List<TransferSlipDto.SimpleEntryDto> creditDtos = new ArrayList<>();
             List<TransferSlipDto.SimpleEntryDto> debitDtos = new ArrayList<>();
-
-
+            
             tDto.getEntries().forEach(entry -> {
                 TransferSlipDto.SimpleEntryDto credit = entry.getCredit();
                 TransferSlipDto.SimpleEntryDto debit = entry.getDebit();
@@ -88,33 +87,8 @@ public class SlipService {
                 }
             });
 
-            List<SlipEntry> credits =  tSlip.getCredits();
+            // 차변 업데이트            
             List<SlipEntry> debits = tSlip.getDebits();
-
-            credits.removeIf(entity -> !creditDtos
-                    .stream()
-                    .map(TransferSlipDto.SimpleEntryDto::getId)
-                    .toList()
-                    .contains(entity.getId())
-            );
-
-            for(TransferSlipDto.SimpleEntryDto credit:creditDtos) {
-                Long id = credit.getId();
-                if(id != null) {
-                    // 업데이트
-                    credits.stream()
-                            .filter(entity -> entity.getId().equals(id))
-                            .findFirst()
-                            .ifPresent(entity -> entity.update(credit, subjectService.get(credit.getSubjectId())));
-                }
-                if(id == null && credit.getSubjectId() != null) {
-                    // 신규 추가
-                    SlipEntry newEntry = SlipEntry.of(
-                            tSlip, credit, subjectService.get(credit.getSubjectId())
-                    );
-                    tSlip.addCredit(newEntry);
-                }
-            }
 
             debits.removeIf(entity -> !debitDtos
                     .stream()
@@ -140,10 +114,38 @@ public class SlipService {
                     tSlip.addDebit(newEntry);
                 }
             }
+
+            // 대변 업데이트            
+            List<SlipEntry> credits =  tSlip.getCredits();
+
+            credits.removeIf(entity -> !creditDtos
+                    .stream()
+                    .map(TransferSlipDto.SimpleEntryDto::getId)
+                    .toList()
+                    .contains(entity.getId())
+            );
+
+            for(TransferSlipDto.SimpleEntryDto credit:creditDtos) {
+                Long id = credit.getId();
+                if(id != null) {
+                    // 업데이트
+                    credits.stream()
+                            .filter(entity -> entity.getId().equals(id))
+                            .findFirst()
+                            .ifPresent(entity -> entity.update(credit, subjectService.get(credit.getSubjectId())));
+                }
+                if(id == null && credit.getSubjectId() != null) {
+                    // 신규 추가
+                    SlipEntry newEntry = SlipEntry.of(
+                            tSlip, credit, subjectService.get(credit.getSubjectId())
+                    );
+                    tSlip.addCredit(newEntry);
+                }
+            }
             repo.save(tSlip);
         }
     }
-
+    
     @Transactional
     public void delete(Long id) {
         repo.deleteById(id);
