@@ -3,6 +3,7 @@ package org.example.accounter.slip.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.accounter.core.dto.SimplePageDto;
 import org.example.accounter.core.mapper.PageMapper;
+import org.example.accounter.slip.controller.request.SlipFilterRequest;
 import org.example.accounter.slip.controller.response.SlipListResponse;
 import org.example.accounter.slip.dto.PaperSlipDto;
 import org.example.accounter.slip.dto.SlipRequest;
@@ -45,8 +46,8 @@ public class SlipController {
         return ResponseEntity.ok("삭제되었습니다.");
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<SimplePageDto<SlipListResponse>> getAll(@RequestParam int page, @RequestParam int size) {
+    @PostMapping("/list")
+    public ResponseEntity<SimplePageDto<SlipListResponse>> getAll(@RequestParam int page, @RequestParam int size, @RequestBody SlipFilterRequest request) {
         Page<SlipListResponse> list = service.getAllDto(page, size);
         return ResponseEntity.ok(pageMapper.toPageDto(list));
     }
