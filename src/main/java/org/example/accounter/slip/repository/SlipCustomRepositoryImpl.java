@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import static org.example.accounter.slip.entity.QSlip.slip;
 
+import org.example.accounter.core.constants.FilterSlipType;
 import org.example.accounter.slip.controller.request.SlipFilterRequest;
 import org.example.accounter.slip.entity.QSlip;
 import org.example.accounter.slip.repository.rdto.RSlipListDto;
@@ -79,8 +80,8 @@ public class SlipCustomRepositoryImpl implements SlipCustomRepository {
                     );
         }
 
-        if(request.getSlip() != null) {
-            builder.and(slip.type.eq(request.getSlip()));
+        if(request.getSlip().convert() != null) {
+            builder.and(slip.type.eq(request.getSlip().convert()));
         }
 
         if(request.getKeyword() != null) {
