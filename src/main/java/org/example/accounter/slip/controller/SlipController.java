@@ -48,7 +48,7 @@ public class SlipController {
 
     @PostMapping("/list")
     public ResponseEntity<SimplePageDto<SlipListResponse>> getAll(@RequestParam int page, @RequestParam int size, @RequestBody SlipFilterRequest request) {
-        Page<SlipListResponse> list = service.getAllDto(page, size);
+        Page<SlipListResponse> list = service.getAllDto(page, size, request);
         return ResponseEntity.ok(pageMapper.toPageDto(list));
     }
 

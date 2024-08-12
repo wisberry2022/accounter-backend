@@ -3,12 +3,14 @@ package org.example.accounter.slip.service;
 import lombok.RequiredArgsConstructor;
 import org.example.accounter.basic_info.account_subject.service.AccountSubjectService;
 import org.example.accounter.core.constants.SlipType;
+import org.example.accounter.slip.controller.request.SlipFilterRequest;
 import org.example.accounter.slip.controller.response.SlipListResponse;
 import org.example.accounter.slip.dto.PaperSlipDto;
 import org.example.accounter.slip.dto.SlipRequest;
 import org.example.accounter.slip.dto.TransferSlipDto;
 import org.example.accounter.slip.entity.*;
 import org.example.accounter.slip.mapper.SlipMapper;
+import org.example.accounter.slip.repository.SlipCustomRepository;
 import org.example.accounter.slip.repository.SlipRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +26,7 @@ import java.util.List;
 public class SlipService {
 
     private final SlipRepository repo;
+    private final SlipCustomRepository qRepo;
     private final SlipMapper mapper;
     private final AccountSubjectService subjectService;
 
@@ -44,10 +47,9 @@ public class SlipService {
     }
 
     @Transactional
-    public Page<SlipListResponse> getAllDto(int page, int size) {
+    public Page<SlipListResponse> getAllDto(int page, int size, SlipFilterRequest request) {
          Pageable pageable = PageRequest.of(page, size);
-         return repo.findAllDto(pageable).map(SlipListResponse::fromRDto);
-
+         return qRepo.findAllDto(pageable, request).map(SlipListResponse::fromRDto);
     }
 
     @Transactional
